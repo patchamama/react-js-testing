@@ -38,11 +38,20 @@ import { renderHook, act } from '@testing-library/react-hooks';
 import { describe, it, expect } from 'vitest';
 import useAverage from './useAverage';
 
-describe('useAverage', () => {
-  it('should calculate initial values correctly', () => {
-    const grades = [10, 9, 8, 7, 6];
+vi.mock('hooks/useAverage');
+let mockedAverage: MockedFunction<any>;
 
-    const { result } = renderHook(() => useAverage(grades));
+describe('useAverage', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+      mockedAverage = vi.mocked(useAverage);
+    });
+
+
+  it('should calculate initial values correctly', () => {
+    mockedAverage.mockReturnValue([10, 9, 8, 7, 6]);
+
+    const { result } = renderHook(() => useAverage());
 
     expect(result.current.average).toBe(8); // Average of [10, 9, 8, 7, 6] = 40 / 5
     expect(result.current.totalSum).toBe(40); // Sum of the grades
@@ -50,11 +59,12 @@ describe('useAverage', () => {
   });
 
   it('should update values when grades change', () => {
-    let grades = [10, 9, 8];
-    const { result, rerender } = renderHook(() => useAverage(grades));
+    mockedAverage.mockReturnValue([10, 9, 8]);
+    
+    const { result, rerender } = renderHook(() => useAverage());
 
     act(() => {
-      grades = [10, 9, 8, 7];
+      mockedAverage.mockReturnValue([10, 9, 8]);
       rerender(); // Trigger rerender to recalculate values
     });
 
@@ -64,9 +74,9 @@ describe('useAverage', () => {
   });
 
   it('should handle empty array', () => {
-    const grades = [];
-
-    const { result } = renderHook(() => useAverage(grades));
+    mockedAverage.mockReturnValue([]);
+    
+    const { result, rerender } = renderHook(() => useAverage());
 
     expect(result.current.average).toBe(0); // Average of empty array is 0
     expect(result.current.totalSum).toBe(0); // Sum of empty array is 0

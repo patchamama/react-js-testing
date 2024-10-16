@@ -4,7 +4,7 @@
 
 ##### Test useState, useEffect, custom hooks (useAverage) example:
 
-- Component `useAverage` (useAverage.ts)
+- Custom Hook `useAverage` (useAverage.ts)
 
 ```js
 import { useEffect, useState } from 'react';

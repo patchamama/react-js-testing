@@ -1,4 +1,6 @@
-# react-js-testing
+## Referencias
+
+- Exercism Javascript Lean
 
 ### Hooks testing
 
